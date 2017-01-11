@@ -1,6 +1,8 @@
 class User < ApplicationRecord
 
   has_many :restaurants
+  has_many :reviews
+  has_many :reviewed_restaurants, through: :reviews, source: :restaurant
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -13,5 +15,9 @@ class User < ApplicationRecord
       user.email = auth.info.email
       user.password = Devise.friendly_token[0,20]
     end
+  end
+
+  def has_reviewed?(restaurant)
+    reviewed_restaurants.include? restaurant
   end
 end
